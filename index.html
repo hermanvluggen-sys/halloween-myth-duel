@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Halloween Mythological Duel</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        body {
+            background-color: #0b0517;
+            color: #e0d0ff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: fixed;
+            touch-action: none;
+        }
+        
+        #game-wrapper {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            max-height: 60vh;
+            aspect-ratio: 16 / 9;
+            border: 3px solid #7c3aed;
+            box-shadow: 0 0 25px rgba(147, 51, 234, 0.7);
+            background: #120822;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: #160b2e;
+        }
+
+        #touch-controls-area {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            height: 130px;
+            background: rgba(18, 8, 34, 0.9);
+            border: 2px solid #581c87;
+            border-top: none;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            align-items: center;
+            justify-content: space-around;
+            padding: 10px;
+            position: relative;
+            z-index: 25;
+        }
+
+        @media (pointer: coarse), (max-width: 950px) {
+            #touch-controls-area {
+                display: flex;
+            }
+            #game-container {
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                max-height: 52vh;
+            }
+        }
+
+        @media (pointer: fine) {
+            #touch-controls-area {
+                display: none !important;
+            }
+            #game-container {
+                border-bottom-left-radius: 12px;
+                border-bottom-right-radius: 12px;
+                max-height: 60vh;
+            }
+        }
+
+        #external-joystick-base {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            background: rgba(124, 58, 237, 0.35);
+            border: 2px solid rgba(192, 132, 252, 0.8);
+            border-radius: 50%;
+            touch-action: none;
+        }
+
+        #external-joystick-thumb {
+            position: absolute;
+            top: 27px;
+            left: 27px;
+            width: 36px;
+            height: 36px;
+            background: rgba(250, 204, 21, 0.95);
+            border-radius: 50%;
+            box-shadow: 0 0 12px #facc15;
+            pointer-events: none;
+        }
+
+        #external-shoot-btn {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #9333ea, #6b21a8);
+            border: 3px solid #facc15;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.5);
+            transition: transform 0.1s;
+        }
+        #external-shoot-btn:active {
+            transform: scale(0.92);
+        }
+
+        .ui-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 8, 34, 0.96);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            padding: 12px;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: clamp(0.95rem, 2.8vw, 1.5rem);
+            color: #c084fc;
+            text-shadow: 0 0 10px #a855f7;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        p.instructions {
+            margin-bottom: 6px;
+            text-align: center;
+            max-width: 580px;
+            font-size: clamp(0.6rem, 1.6vw, 0.78rem);
+            color: #d8b4fe;
+            line-height: 1.3;
+        }
+
+        .btn {
+            background-color: #7c3aed;
+            color: #fff;
+            border: 2px solid #c084fc;
+            padding: 6px 14px;
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+            margin: 3px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
+            transition: all 0.2s ease;
+            font-weight: bold;
+        }
+
+        .btn:active, .btn:hover {
+            background-color: #9333ea;
+            box-shadow: 0 0 15px #c084fc;
+            transform: scale(1.03);
+        }
+
+        .char-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin: 6px 0;
+            max-height: 135px;
+            width: 100%;
+            max-width: 490px;
+            overflow-y: auto;
+            padding: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: #7c3aed #1e1b4b;
+        }
+
+        .char-card {
+            aspect-ratio: 1;
+            background: #2e1065;
+            border: 2px solid #4c1d95;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: clamp(0.42rem, 1.1vw, 0.55rem);
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .char-card.selected {
+            border-color: #facc15;
+            box-shadow: 0 0 10px #facc15;
+            background: #4c1d95;
+        }
+
+        .char-card span {
+            font-size: clamp(0.85rem, 2.2vw, 1.2rem);
+            margin-bottom: 2px;
+        }
+
+        #hud {
+            position: absolute;
+            top: 6px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: clamp(0.65rem, 1.8vw, 0.85rem);
+            font-weight: bold;
+            color: #f3e8ff;
+            text-shadow: 0 0 5px #7c3aed;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #leaderboard {
+            position: absolute;
+            top: 28px;
+            right: 10px;
+            background: rgba(30, 27, 75, 0.85);
+            border: 2px solid #9333ea;
+            padding: 4px 8px;
+            font-size: clamp(0.55rem, 1.4vw, 0.68rem);
+            border-radius: 6px;
+            pointer-events: none;
+            z-index: 10;
+            min-width: 115px;
+        }
+
+        #leaderboard h3 {
+            color: #c084fc;
+            margin-bottom: 2px;
+            text-align: center;
+            font-size: clamp(0.6rem, 1.5vw, 0.7rem);
+            border-bottom: 1px dashed #7c3aed;
+            padding-bottom: 2px;
+        }
+
+        .rank-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 2px 0;
+            gap: 6px;
+        }
+
+        .modal {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.88);
+            z-index: 40;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+        }
+
+        .modal-content {
+            background: #1e1b4b;
+            padding: 14px;
+            border: 3px solid #9333ea;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 320px;
+            width: 100%;
+        }
+
+        input {
+            padding: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            background: #090514;
+            color: #fff;
+            border: 2px solid #7c3aed;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 200px;
+            margin: 4px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-wrapper">
+        <div id="game-container">
+            <div id="hud" style="display:none;">
+                <div>PUNTOS: <span id="score">0</span></div>
+                <div>TIEMPO: <span id="timer">60</span>s</div>
+                <div>MODO: <span id="net-status">SOLO</span></div>
+            </div>
+
+            <div id="leaderboard" style="display:none;">
+                <h3>🏆 RANKING</h3>
+                <div id="rank-list"></div>
+            </div>
+
+            <div id="menu-screen" class="ui-screen">
+                <h1>🎃 HALLOWEEN MYTHOLOGICAL DUEL 👻</h1>
+                <p class="instructions">¡Elige tu ser mitológico! Muevete, lanza hechizos con 🪄 y recoge calabazas doradas para invencibilidad, imán de caramelos y explosión de confeti.</p>
+                
+                <div class="char-grid" id="char-selection"></div>
+
+                <div style="margin-top: 6px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;">
+                    <button class="btn" id="start-solo-btn">¡JUGAR SOLO!</button>
+                    <button class="btn" id="multi-btn" style="background-color: #581c87;">SALA MULTIJUGADOR</button>
+                </div>
+            </div>
+
+            <canvas id="gameCanvas" width="800" height="450"></canvas>
+
+            <div id="multi-modal" class="modal">
+                <div class="modal-content">
+                    <h2>MODO MULTIJUGADOR</h2>
+                    <p style="font-size: 0.7rem; margin: 4px 0;">Crea una sala o introduce el código de un amigo en otro dispositivo.</p>
+                    <div style="margin: 6px 0;">
+                        <p style="font-size: 0.65rem;">Tu Código de Sala:</p>
+                        <input type="text" id="room-code-input" readonly value="DUELO-9921" />
+                        <button class="btn" id="copy-code-btn" style="font-size:0.65rem; padding:3px 6px;">Copiar</button>
+                    </div>
+                    <div style="margin: 6px 0; border-top: 1px dashed #7c3aed; padding-top: 6px;">
+                        <p style="font-size: 0.65rem;">¿Unirte a la sala de un amigo?</p>
+                        <input type="text" id="join-code-input" placeholder="Ej: DUELO-1234" />
+                        <button class="btn" id="join-room-btn" style="background-color: #047857; font-size: 0.7rem; padding: 4px 8px;">CONECTAR</button>
+                    </div>
+                    <button class="btn" id="start-multi-match" style="background-color: #b91c1c; width: 100%; margin-top: 4px;">¡EMPEZAR BATALLA ONLINE!</button>
+                    <button class="btn" id="close-modal-btn" style="background-color: #334155; font-size: 0.65rem; width: 100%; margin-top: 4px;">Volver</button>
+                </div>
+            </div>
+
+            <div id="podium-modal" class="modal">
+                <div class="modal-content">
+                    <h2>🎉 ¡FIN DE LA PARTIDA! 🏆</h2>
+                    <p style="font-size: 0.75rem; margin: 4px 0;">Así ha quedado el podio global:</p>
+                    <div id="podium-results" style="margin: 6px 0; font-size: 0.75rem; text-align: left; padding: 0 4px;"></div>
+                    <button class="btn" id="restart-btn" style="background-color: #7c3aed; width: 100%;">JUGAR OTRA VEZ</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="touch-controls-area">
+            <div id="external-joystick-base">
+                <div id="external-joystick-thumb"></div>
+            </div>
+            <div id="external-shoot-btn" title="Disparar Hechizo">🪄</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const characters = [
+            { name: "Zeus", icon: "⚡" }, { name: "Anubis", icon: "🐕" },
+            { name: "Valkyrie", icon: "🛡️" }, { name: "Medusa", icon: "🐍" },
+            { name: "Kitsune", icon: "🦊" }, { name: "Dragon", icon: "🐲" },
+            { name: "Grim", icon: "💀" }, { name: "Witch", icon: "🧙‍♀️" },
+            { name: "Vampire", icon: "🧛‍♂️" }, { name: "Ghost", icon: "👻" },
+            { name: "Zombie", icon: "🧟" }, { name: "Demon", icon: "😈" },
+            { name: "Alien", icon: "👽" }, { name: "Pumpkin", icon: "🎃" },
+            { name: "Phoenix", icon: "🔥" }, { name: "Cerberus", icon: "🐕‍🦺" },
+            { name: "Griffin", icon: "🦅" }, { name: "Pegasus", icon: "🐴" },
+            { name: "Kraken", icon: "🦑" }, { name: "Minotaur", icon: "🐂" },
+            { name: "Chimera", icon: "🦁" }, { name: "Sphinx", icon: "🗿" },
+            { name: "Yeti", icon: "🧌" }, { name: "Gargoyle", icon: "🦇" },
+            { name: "Hydra", icon: "🐉" }, { name: "Cyclops", icon: "👁️" },
+            { name: "Banshee", icon: "🗣️" }, { name: "Goblin", icon: "👺" },
+            { name: "Werewolf", icon: "🐺" }, { name: "Cthulhu", icon: "🐙" }
+        ];
+
+        let selectedCharIndex = 0;
+        let gameStarted = false;
+        let score = 0;
+        let timeLeft = 60;
+        let gameTimerInterval = null;
+        let localHitTimer = 0;
+        let localShieldTimer = 0;
+        let isOnlineMode = false;
+        let currentRoomCode = "DUELO-9921";
+        
+        let db, auth, userId, appId;
+        let remotePlayers = {};
+        let unsubRoom = null;
+
+        try {
+            appId = typeof __app_id !== 'undefined' ? __app_id : 'halloween-myth-duel-v1';
+            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+                apiKey: "AIzaSyDummyKeyForSandbox12345",
+                authDomain: "sandbox-app.firebaseapp.com",
+                projectId: "sandbox-app",
+                storageBucket: "sandbox-app.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456789:web:abcdef"
+            };
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            async function initAuth() {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    userId = auth.currentUser ? auth.currentUser.uid : 'user_' + Math.random().toString(36).substring(2, 9);
+                } catch (e) {
+                    userId = 'user_' + Math.random().toString(36).substring(2, 9);
+                }
+            }
+            initAuth();
+        } catch (err) {
+            userId = 'user_' + Math.random().toString(36).substring(2, 9);
+        }
+
+        let bots = [
+            { x: 300, y: 150, vx: 2.2, vy: 1.4, charIndex: 6, name: "Grim", score: 0, hitTimer: 0 },
+            { x: 550, y: 320, vx: -2.0, vy: 1.6, charIndex: 3, name: "Medusa", score: 0, hitTimer: 0 },
+            { x: 220, y: 280, vx: 2.0, vy: -1.8, charIndex: 0, name: "Zeus", score: 0, hitTimer: 0 }
+        ];
+
+        let candies = [];
+        let projectiles = [];
+        let powerUps = []; 
+        let glitterParticles = [];
+        let backgroundEffects = [];
+        let keys = {};
+
+        let joystickActive = false;
+        let joystickVector = { x: 0, y: 0 };
+        const joystickBase = document.getElementById("external-joystick-base");
+        const joystickThumb = document.getElementById("external-joystick-thumb");
+
+        if (joystickBase) {
+            joystickBase.addEventListener("touchstart", (e) => {
+                joystickActive = true;
+                handleJoystickMove(e.touches[0]);
+                e.preventDefault();
+            }, { passive: false });
+        }
+
+        window.addEventListener("touchmove", (e) => {
+            if (!joystickActive) return;
+            for (let i = 0; i < e.touches.length; i++) {
+                let touch = e.touches[i];
+                let rect = joystickBase.getBoundingClientRect();
+                if (touch.clientX >= rect.left - 50 && touch.clientX <= rect.right + 50 &&
+                    touch.clientY >= rect.top - 50 && touch.clientY <= rect.bottom + 50) {
+                    handleJoystickMove(touch);
+                    break;
+                }
+            }
+            e.preventDefault();
+        }, { passive: false });
+
+        window.addEventListener("touchend", () => {
+            joystickActive = false;
+            joystickVector = { x: 0, y: 0 };
+            if (joystickThumb) joystickThumb.style.transform = `translate(0px, 0px)`;
+        });
+
+        function handleJoystickMove(touch) {
+            let rect = joystickBase.getBoundingClientRect();
+            let centerX = rect.left + rect.width / 2;
+            let centerY = rect.top + rect.height / 2;
+            let dx = touch.clientX - centerX;
+            let dy = touch.clientY - centerY;
+            let dist = Math.hypot(dx, dy);
+            let maxRadius = 28;
+
+            if (dist > maxRadius) {
+                dx = (dx / dist) * maxRadius;
+                dy = (dy / dist) * maxRadius;
+            }
+
+            if (joystickThumb) joystickThumb.style.transform = `translate(${dx}px, ${dy}px)`;
+            joystickVector = { x: dx / maxRadius, y: dy / maxRadius };
+        }
+
+        const shootBtn = document.getElementById("external-shoot-btn");
+        if (shootBtn) {
+            shootBtn.ontouchstart = (e) => {
+                if (gameStarted) shootProjectile();
+                e.preventDefault();
+            };
+            shootBtn.onclick = () => {
+                if (gameStarted) shootProjectile();
+            };
+        }
+
+        const grid = document.getElementById("char-selection");
+        if (grid) {
+            characters.forEach((char, idx) => {
+                const card = document.createElement("div");
+                card.className = `char-card ${idx === 0 ? 'selected' : ''}`;
+                card.innerHTML = `<span>${char.icon}</span>${char.name}`;
+                card.onclick = () => {
+                    document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedCharIndex = idx;
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        let player = { x: 100, y: 225, speed: 5.5 };
+
+        window.addEventListener('keydown', e => {
+            keys[e.key.toLowerCase()] = true;
+            keys[e.code] = true;
+            if ((e.code === 'Space' || e.key === 'Enter') && gameStarted) {
+                shootProjectile();
+            }
+        });
+        window.addEventListener('keyup', e => {
+            keys[e.key.toLowerCase()] = false;
+            keys[e.code] = false;
+        });
+
+        function shootProjectile() {
+            projectiles.push({ x: player.x + 15, y: player.y + 15, vx: 9, vy: 0, owner: 'local' });
+        }
+
+        function spawnCandy() {
+            let maxCandies = 9;
+            if (candies.length < maxCandies) {
+                candies.push({
+                    id: Math.random().toString(36).substring(2, 9),
+                    x: Math.random() * 720 + 40,
+                    y: Math.random() * 300 + 60,
+                    icon: ["🍬", "🍫", "🍭", "🧁", "🍩"][Math.floor(Math.random() * 5)]
+                });
+            }
+        }
+        setInterval(spawnCandy, 1200);
+        for (let i = 0; i < 8; i++) spawnCandy();
+
+        for (let i = 0; i < 14; i++) {
+            backgroundEffects.push({
+                x: Math.random() * 800,
+                y: Math.random() * 280,
+                vx: (Math.random() * 1.5 + 0.5) * (Math.random() < 0.5 ? 1 : -1),
+                vy: (Math.random() * 0.4 - 0.2),
+                type: Math.random() < 0.4 ? 'bat' : 'leaf',
+                size: Math.random() * 6 + 8,
+                color: ["#c084fc", "#facc15", "#fb923c", "#4ade80", "#38bdf8"][Math.floor(Math.random() * 5)]
+            });
+        }
+
+        setInterval(() => {
+            if (gameStarted && powerUps.length === 0) {
+                powerUps.push({
+                    x: Math.random() * 680 + 60,
+                    y: Math.random() * 260 + 80,
+                    duration: 400
+                });
+            }
+        }, 13000);
+
+        function spawnMiniExplosion(x, y) {
+            for (let i = 0; i < 28; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 4.5 + 1.2;
+                glitterParticles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    life: 45,
+                    color: ["#facc15", "#c084fc", "#38bdf8", "#f472b6", "#4ade80", "#fb923c", "#e879f9"][Math.floor(Math.random() * 7)]
+                });
+            }
+        }
+
+        document.getElementById("start-solo-btn").onclick = () => {
+            isOnlineMode = false;
+            document.getElementById("net-status").innerText = "SOLO";
+            startGame();
+        };
+
+        document.getElementById("multi-btn").onclick = () => {
+            document.getElementById("multi-modal").style.display = "flex";
+            currentRoomCode = "DUELO-" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('room-code-input').value = currentRoomCode;
+        };
+
+        document.getElementById("close-modal-btn").onclick = () => {
+            document.getElementById("multi-modal").style.display = "none";
+        };
+
+        document.getElementById("copy-code-btn").onclick = () => {
+            const input = document.getElementById('room-code-input');
+            input.select();
+            document.execCommand('copy');
+        };
+
+        document.getElementById("join-room-btn").onclick = () => {
+            const codeToJoin = document.getElementById("join-code-input").value.trim();
+            if (codeToJoin) {
+                currentRoomCode = codeToJoin.toUpperCase();
+                document.getElementById('room-code-input').value = currentRoomCode;
+                alert("¡Código de sala actualizado a " + currentRoomCode + "!");
+            }
+        };
+
+        document.getElementById("start-multi-match").onclick = () => {
+            isOnlineMode = true;
+            document.getElementById("net-status").innerText = "ONLINE (" + currentRoomCode + ")";
+            document.getElementById("multi-modal").style.display = "none";
+            startGame();
+            setupFirestoreMultiplayer();
+        };
+
+        document.getElementById("restart-btn").onclick = () => {
+            document.getElementById("podium-modal").style.display = "none";
+            score = 0;
+            timeLeft = 60;
+            localShieldTimer = 0;
+            document.getElementById("score").innerText = score;
+            bots.forEach(b => { b.score = 0; b.hitTimer = 0; });
+            player.x = 100; player.y = 225;
+            startGame();
+        };
+
+        function startGame() {
+            document.getElementById("menu-screen").style.display = "none";
+            document.getElementById("hud").style.display = "flex";
+            document.getElementById("leaderboard").style.display = "block";
+            gameStarted = true;
+
+            if (gameTimerInterval) clearInterval(gameTimerInterval);
+            gameTimerInterval = setInterval(() => {
+                if (!gameStarted) return;
+                timeLeft--;
+                const timerEl = document.getElementById("timer");
+                if (timerEl) timerEl.innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(gameTimerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function setupFirestoreMultiplayer() {
+            if (!db) return;
+            const roomDocRef = doc(db, 'artifacts_data', appId + '_rooms_' + currentRoomCode);
+
+            setInterval(async () => {
+                if (!gameStarted || !isOnlineMode) return;
+                try {
+                    const uId = userId || 'player_' + Math.floor(Math.random()*1000);
+                    await setDoc(roomDocRef, {
+                        lastUpdated: Date.now(),
+                        [uId]: {
+                            name: "Jugador (" + characters[selectedCharIndex].name + ")",
+                            charIndex: selectedCharIndex,
+                            x: Math.round(player.x),
+                            y: Math.round(player.y),
+                            score: score
+                        }
+                    }, { merge: true });
+                } catch (e) {}
+            }, 120);
+
+            unsubRoom = onSnapshot(roomDocRef, (snap) => {
+                if (!snap.exists()) return;
+                const data = snap.data();
+                remotePlayers = {};
+                const currentUserId = userId;
+                for (let key in data) {
+                    if (key !== 'lastUpdated' && key !== currentUserId) {
+                        remotePlayers[key] = data[key];
+                    }
+                }
+            }, (err) => {});
+        }
+
+        function endGame() {
+            gameStarted = false;
+            document.getElementById("hud").style.display = "none";
+            document.getElementById("leaderboard").style.display = "none";
+            if (unsubRoom) { unsubRoom(); unsubRoom = null; }
+
+            let participants = [
+                { name: "Tú (" + characters[selectedCharIndex].name + ")", score: score, icon: characters[selectedCharIndex].icon }
+            ];
+
+            if (isOnlineMode) {
+                for (let rId in remotePlayers) {
+                    let rp = remotePlayers[rId];
+                    participants.push({
+                        name: rp.name || "Jugador Online",
+                        score: rp.score || 0,
+                        icon: characters[rp.charIndex || 0].icon
+                    });
+                }
+            } else {
+                bots.forEach(b => {
+                    participants.push({ name: b.name + " (" + characters[b.charIndex].name + ")", score: b.score, icon: characters[b.charIndex].icon });
+                });
+            }
+
+            participants.sort((a, b) => b.score - a.score);
+
+            let podiumHtml = "";
+            let medals = ["🥇 1.er: ", "🥈 2.do: ", "🥉 3.er: "];
+            
+            for (let i = 0; i < Math.min(3, participants.length); i++) {
+                podiumHtml += `<div style="margin: 4px 0;"><b>${medals[i]}</b> ${participants[i].icon} ${participants[i].name} — <b>${participants[i].score} pts</b></div>`;
+            }
+
+            document.getElementById("podium-results").innerHTML = podiumHtml;
+            document.getElementById("podium-modal").style.display = "flex";
+        }
+
+        function update() {
+            if (!gameStarted) return;
+
+            backgroundEffects.forEach(eff => {
+                eff.x += eff.vx;
+                eff.y += eff.vy + Math.sin(Date.now() * 0.003) * 0.3;
+                if (eff.x > 820) eff.x = -20;
+                if (eff.x < -20) eff.x = 820;
+                if (eff.y > 320) eff.y = 50;
+                if (eff.y < 20) eff.y = 320;
+            });
+
+            if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
+            if (keys['arrowright'] || keys['d']) player.x += player.speed;
+            if (keys['arrowup'] || keys['w']) player.y -= player.speed;
+            if (keys['arrowdown'] || keys['s']) player.y += player.speed;
+
+            if (joystickActive && (joystickVector.x !== 0 || joystickVector.y !== 0)) {
+                player.x += joystickVector.x * player.speed;
+                player.y += joystickVector.y * player.speed;
+            }
+
+            player.x = Math.max(20, Math.min(canvas.width - 50, player.x));
+            player.y = Math.max(40, Math.min(canvas.height - 50, player.y));
+
+            if (localHitTimer > 0) localHitTimer--;
+            
+            let previousShieldState = localShieldTimer > 0;
+            if (localShieldTimer > 0) localShieldTimer--;
+
+            if (previousShieldState && localShieldTimer === 0) {
+                spawnMiniExplosion(player.x + 15, player.y + 15);
+            }
+
+            candies.forEach((candy, index) => {
+                if (Math.hypot(player.x - candy.x, player.y - candy.y) < 32) {
+                    score += 10;
+                    const scoreEl = document.getElementById("score");
+                    if (scoreEl) scoreEl.innerText = score;
+                    candies.splice(index, 1);
+                }
+            });
+
+            powerUps.forEach((pu, index) => {
+                pu.duration--;
+                if (Math.hypot(player.x - pu.x, player.y - pu.y) < 35) {
+                    localShieldTimer = 400;
+                    spawnMiniExplosion(pu.x + 15, pu.y + 15);
+                    powerUps.splice(index, 1);
+                } else if (pu.duration <= 0) {
+                    powerUps.splice(index, 1);
+                }
+            });
+
+            glitterParticles.forEach((gp, index) => {
+                gp.x += gp.vx;
+                gp.y += gp.vy;
+                gp.life--;
+
+                if (!isOnlineMode) {
+                    bots.forEach(bot => {
+                        if (bot && Math.hypot(gp.x - bot.x, gp.y - bot.y) < 22) {
+                            if (bot.score >= 10 && Math.random() < 0.25) {
+                                bot.score -= 10;
+                                bot.hitTimer = 30;
+                                candies.push({
+                                    id: Math.random().toString(36).substring(2, 9),
+                                    x: bot.x + (Math.random() * 30 - 15),
+                                    y: bot.y + (Math.random() * 30 - 15),
+                                    icon: "🍬"
+                                });
+                            }
+                        }
+                    });
+                }
+
+                if (gp.life <= 0) {
+                    glitterParticles.splice(index, 1);
+                }
+            });
+
+            if (localShieldTimer > 0) {
+                candies.forEach((candy, index) => {
+                    let dist = Math.hypot(player.x - candy.x, player.y - candy.y);
+                    if (dist < 120) {
+                        candy.x += (player.x - candy.x) * 0.15;
+                        candy.y += (player.y - candy.y) * 0.15;
+                        if (dist < 32) {
+                            score += 15;
+                            document.getElementById("score").innerText = score;
+                            candies.splice(index, 1);
+                        }
+                    }
+                });
+
+                if (!isOnlineMode) {
+                    bots.forEach(bot => {
+                        if (bot && Math.hypot(player.x - bot.x, player.y - bot.y) < 45) {
+                            if (bot.score >= 10 && Math.random() < 0.15) {
+                                bot.score -= 10;
+                                score += 10;
+                                document.getElementById("score").innerText = score;
+                                bot.hitTimer = 35;
+                                spawnMiniExplosion(bot.x + 15, bot.y + 15);
+                                candies.push({
+                                    id: Math.random().toString(36).substring(2, 9),
+                                    x: bot.x,
+                                    y: bot.y,
+                                    icon: "🍬"
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+
+            projectiles.forEach((p, index) => {
+                p.x += p.vx;
+                if (p.x > canvas.width) {
+                    projectiles.splice(index, 1);
+                    return;
+                }
+
+                if (!isOnlineMode) {
+                    bots.forEach(bot => {
+                        if (bot && Math.hypot(p.x - bot.x, p.y - bot.y) < 28) {
+                            if (bot.score >= 10) {
+                                bot.score -= 10;
+                                if (p.owner === 'local') {
+                                    score += 10;
+                                    document.getElementById("score").innerText = score;
+                                }
+                            }
+                            bot.hitTimer = 35;
+                            spawnMiniExplosion(bot.x + 15, bot.y + 15);
+                            candies.push({
+                                id: Math.random().toString(36).substring(2, 9),
+                                x: bot.x,
+                                y: bot.y,
+                                icon: "🍫"
+                            });
+                            projectiles.splice(index, 1);
+                        }
+                    });
+                }
+            });
+
+            if (!isOnlineMode) {
+                bots.forEach(bot => {
+                    if (!bot) return;
+                    if (bot.hitTimer > 0) bot.hitTimer--;
+                    bot.x += bot.vx;
+                    bot.y += bot.vy;
+
+                    if (bot.x < 30 || bot.x > canvas.width - 50) bot.vx *= -1;
+                    if (bot.y < 40 || bot.y > canvas.height - 50) bot.vy *= -1;
+
+                    candies.forEach((candy, cIndex) => {
+                        if (Math.hypot(bot.x - candy.x, bot.y - candy.y) < 28) {
+                            bot.score += 10;
+                            candies.splice(cIndex, 1);
+                        }
+                    });
+                });
+            }
+
+            updateLeaderboard();
+        }
+
+        function updateLeaderboard() {
+            let participants = [
+                { name: "Tú", score: score }
+            ];
+
+            if (isOnlineMode) {
+                for (let rId in remotePlayers) {
+                    let rp = remotePlayers[rId];
+                    participants.push({ name: rp.name ? rp.name.split(" ")[0] : "Jugador", score: rp.score || 0 });
+                }
+            } else {
+                bots.forEach(b => {
+                    participants.push({ name: b.name, score: b.score });
+                });
+            }
+
+            participants.sort((a, b) => b.score - a.score);
+
+            let rankHtml = "";
+            participants.forEach((p, idx) => {
+                let isMe = p.name === "Tú" ? "color: #facc15; font-weight: bold;" : "";
+                rankHtml += `<div class="rank-row" style="${isMe}"><span>${idx + 1}. ${p.name}</span><span>${p.score}</span></div>`;
+            });
+            const rankListEl = document.getElementById("rank-list");
+            if (rankListEl) rankListEl.innerHTML = rankHtml;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#1e1b4b";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "rgba(250, 204, 21, 0.15)";
+            ctx.beginPath();
+            ctx.arc(680, 90, 65, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#facc15";
+            ctx.beginPath();
+            ctx.arc(680, 90, 40, 0, Math.PI * 2);
+            ctx.fill();
+
+            backgroundEffects.forEach(eff => {
+                if (eff.type === 'bat') {
+                    ctx.font = "14px monospace";
+                    ctx.fillText("🦇", eff.x, eff.y);
+                } else {
+                    ctx.fillStyle = eff.color;
+                    ctx.beginPath();
+                    ctx.ellipse(eff.x, eff.y, eff.size, eff.size * 0.5, Math.sin(Date.now() * 0.005), 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            ctx.fillStyle = "#2e1065";
+            ctx.beginPath();
+            ctx.moveTo(0, 270);
+            ctx.quadraticCurveTo(200, 200, 400, 250);
+            ctx.quadraticCurveTo(650, 310, 800, 240);
+            ctx.lineTo(800, 450);
+            ctx.lineTo(0, 450);
+            ctx.fill();
+
+            candies.forEach(candy => {
+                ctx.font = "22px monospace";
+                ctx.fillText(candy.icon, candy.x, candy.y);
+            });
+
+            powerUps.forEach(pu => {
+                ctx.font = "26px monospace";
+                ctx.fillText("🎃", pu.x, pu.y + 18);
+                ctx.fillStyle = "rgba(250, 204, 21, 0.5)";
+                ctx.beginPath();
+                ctx.arc(pu.x + 12, pu.y + 10, 22 + Math.sin(Date.now() * 0.01) * 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            ctx.fillStyle = "#facc15";
+            projectiles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            glitterParticles.forEach(gp => {
+                ctx.fillStyle = gp.color;
+                ctx.fillRect(gp.x, gp.y, 5, 5);
+            });
+
+            if (!isOnlineMode) {
+                bots.forEach(bot => {
+                    if (!bot) return;
+                    let bChar = characters[bot.charIndex];
+                    ctx.font = "30px monospace";
+                    if (bot.hitTimer > 0 && Math.floor(Date.now() / 80) % 2 === 0) {
+                        ctx.globalAlpha = 0.3;
+                    }
+                    ctx.fillText(bChar.icon, bot.x, bot.y + 22);
+                    ctx.globalAlpha = 1.0;
+
+                    ctx.fillStyle = "#f3e8ff";
+                    ctx.font = "10px monospace";
+                    ctx.fillText(bot.name, bot.x - 2, bot.y - 4);
+                });
+            } else {
+                for (let rId in remotePlayers) {
+                    let rp = remotePlayers[rId];
+                    let rChar = characters[rp.charIndex || 0];
+                    ctx.font = "30px monospace";
+                    ctx.fillText(rChar.icon, rp.x || 100, (rp.y || 200) + 22);
+                    ctx.fillStyle = "#38bdf8";
+                    ctx.font = "10px monospace";
+                    ctx.fillText(rp.name || "Jugador", (rp.x || 100) - 5, (rp.y || 200) - 4);
+                }
+            }
+
+            const char = characters[selectedCharIndex];
+            ctx.font = "30px monospace";
+            if (localHitTimer > 0 && Math.floor(Date.now() / 80) % 2 === 0) {
+                ctx.globalAlpha = 0.3;
+            }
+            ctx.fillText(char.icon, player.x, player.y + 22);
+            ctx.globalAlpha = 1.0;
+
+            if (localShieldTimer > 0) {
+                ctx.strokeStyle = "rgba(250, 204, 21, 0.85)";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(player.x + 14, player.y + 10, 32, 0, Math.PI * 2);
+                ctx.stroke();
+
+                let glitterColors = ["#facc15", "#c084fc", "#38bdf8", "#f472b6", "#4ade80", "#fb923c"];
+                let time = Date.now() * 0.009;
+                for (let g = 0; g < 6; g++) {
+                    let angle = time + (g * ((Math.PI * 2) / 6));
+                    let gx = (player.x + 14) + Math.cos(angle) * 32;
+                    let gy = (player.y + 10) + Math.sin(angle) * 32;
+                    ctx.fillStyle = glitterColors[g];
+                    ctx.fillRect(gx - 2, gy - 2, 5, 5);
+                }
+            }
+
+            ctx.fillStyle = "#facc15";
+            ctx.font = "10px monospace";
+            ctx.fillText("TÚ", player.x + 4, player.y - 4);
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    </script>
+</body>
+</html>
