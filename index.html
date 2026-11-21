@@ -21,19 +21,15 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            min-height: 100dvh;
             width: 100vw;
             overflow: hidden;
             position: fixed;
-            inset: 0;
             touch-action: none;
         }
         
         #game-wrapper {
-            width: 100%;
-            height: 100%;
-            max-width: 100vw;
-            max-height: 100dvh;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -78,87 +74,18 @@
             z-index: 25;
         }
 
-        /* Mostrar controles táctiles EXCLUSIVAMENTE en dispositivos táctiles */
-        @media (pointer: coarse) and (orientation: portrait), (hover: none) and (orientation: portrait) {
-            #game-wrapper {
-                padding: 4px;
-                justify-content: center;
+        @media (pointer: coarse), (max-width: 950px) {
+            #touch-controls-area {
+                display: flex;
             }
             #game-container {
-                width: 100%;
-                max-width: 100%;
-                max-height: 64dvh;
-                height: auto;
-                aspect-ratio: 16 / 10;
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: 0;
-            }
-            #touch-controls-area {
-                display: flex !important;
-                width: 100%;
-                max-width: 100%;
-                height: 28dvh;
-                min-height: 120px;
-                max-height: 180px;
-                justify-content: space-between;
-                padding: 12px 28px;
-            }
-            #external-joystick-base, #external-shoot-btn {
-                width: 105px;
-                height: 105px;
-            }
-            #external-joystick-thumb {
-                top: 32px;
-                left: 32px;
-                width: 41px;
-                height: 41px;
+                max-height: 52vh;
             }
         }
 
-        @media (pointer: coarse) and (orientation: landscape), (hover: none) and (orientation: landscape) {
-            #game-wrapper {
-                padding: 2px;
-                flex-direction: row;
-            }
-            #game-container {
-                width: 100vw;
-                height: 98dvh;
-                max-width: 100vw;
-                max-height: 98dvh;
-                aspect-ratio: unset;
-                border-radius: 8px;
-            }
-            #touch-controls-area {
-                display: flex !important;
-                position: fixed;
-                bottom: 12px;
-                left: 0;
-                right: 0;
-                width: 100vw;
-                max-width: 100vw;
-                height: auto;
-                background: transparent;
-                border: none;
-                pointer-events: none;
-                justify-content: space-between;
-                padding: 0 24px;
-                z-index: 25;
-            }
-            #external-joystick-base, #external-shoot-btn {
-                pointer-events: auto;
-                width: 95px;
-                height: 95px;
-                opacity: 0.85;
-            }
-            #external-joystick-thumb {
-                top: 29px;
-                left: 29px;
-                width: 37px;
-                height: 37px;
-            }
-        }
-
-        @media (pointer: fine) and (hover: hover) {
+        @media (pointer: fine) {
             #touch-controls-area {
                 display: none !important;
             }
@@ -361,358 +288,25 @@
 
         .modal-content {
             background: #1e1b4b;
-            padding: 16px;
+            padding: 14px;
             border: 3px solid #9333ea;
-            border-radius: 12px;
-            text-align: center;
-            max-width: 360px;
-            width: 100%;
-            box-shadow: 0 0 25px rgba(147, 51, 234, 0.8);
-            max-height: 90dvh;
-            overflow-y: auto;
-        }
-
-        .lobby-list {
-            background: #0f0a29;
-            border: 2px solid #581c87;
             border-radius: 8px;
-            padding: 8px;
-            margin: 8px 0;
-            max-height: 110px;
-            overflow-y: auto;
-            text-align: left;
-            font-size: 0.78rem;
-        }
-
-        .lobby-player-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 4px 6px;
-            border-bottom: 1px solid #2e1065;
-            color: #e9d5ff;
-        }
-        .lobby-player-item:last-child {
-            border-bottom: none;
-        }
-
-        .lobby-section-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #facc15;
-            font-weight: bold;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .lobby-host-box {
-            background: linear-gradient(135deg, rgba(250, 204, 21, 0.16), rgba(124, 58, 237, 0.25));
-            border: 1.5px solid #facc15;
-            border-radius: 6px;
-            padding: 6px 8px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #fef08a;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(250, 204, 21, 0.2);
-        }
-
-        .lobby-guests-box {
-            border-top: 1px dashed #7c3aed;
-            padding-top: 6px;
-        }
-
-        .status-msg {
-            font-size: 0.72rem;
-            color: #facc15;
-            margin-top: 6px;
-            min-height: 16px;
+            text-align: center;
+            max-width: 320px;
+            width: 100%;
         }
 
         input {
-            padding: 7px;
+            padding: 5px;
             font-family: 'Courier New', Courier, monospace;
             background: #090514;
             color: #fff;
             border: 2px solid #7c3aed;
-            border-radius: 6px;
+            border-radius: 4px;
             width: 100%;
-            margin: 6px 0;
-            text-align: center;
-            font-size: 0.85rem;
-        }
-
-        /* Pantalla de Regalo y Cumpleaños estilo Clash Royale */
-        #birthday-overlay {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(14, 6, 30, 0.82);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 60;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            overflow: hidden;
-        }
-
-        /* Sección de Cofres / Recompensas estilo Fall Guys */
-        #chests-hub-screen {
-            display: none;
-            z-index: 45;
-            background: radial-gradient(circle at top, #2e1065 0%, #120822 85%);
-        }
-
-        .fg-chests-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            width: 100%;
-            max-width: 660px;
-            margin: 8px 0 10px 0;
-            padding: 4px;
-        }
-
-        @media (max-width: 540px) {
-            .fg-chests-grid {
-                grid-template-columns: repeat(2, 1fr);
-                max-height: 210px;
-                overflow-y: auto;
-            }
-        }
-
-        .fg-chest-card {
-            background: linear-gradient(165deg, #2563eb 0%, #4f46e5 55%, #312e81 100%);
-            border: 3px solid #60a5fa;
-            border-radius: 14px;
-            padding: 10px 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            text-align: center;
-            box-shadow: 0 5px 0 #1e1b4b, 0 0 16px rgba(96, 165, 250, 0.45);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-            position: relative;
-        }
-
-        .fg-chest-card:hover {
-            transform: translateY(-3px) scale(1.02);
-        }
-
-        .fg-chest-card.special-juan {
-            background: linear-gradient(165deg, #0284c7 0%, #1d4ed8 55%, #1e1b4b 100%);
-            border-color: #facc15;
-            box-shadow: 0 5px 0 #713f12, 0 0 20px rgba(250, 204, 21, 0.65);
-        }
-
-        .fg-chest-card.claimed {
-            opacity: 0.72;
-            filter: grayscale(0.35);
-        }
-
-        .fg-badge-tag {
-            position: absolute;
-            top: -8px;
-            right: 8px;
-            background: #facc15;
-            color: #1e1b4b;
-            font-size: 0.58rem;
-            font-weight: 900;
-            padding: 2px 7px;
-            border-radius: 999px;
-            border: 1.5px solid #fff;
-            text-transform: uppercase;
-        }
-
-        .fg-chest-icon {
-            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            max-width: 200px;
             margin: 4px 0;
-            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
-        }
-
-        .fg-chest-title {
-            font-size: clamp(0.7rem, 1.8vw, 0.84rem);
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 2px;
-        }
-
-        .fg-chest-reward {
-            font-size: clamp(0.58rem, 1.4vw, 0.68rem);
-            color: #fde047;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-
-        .fg-open-btn {
-            background: linear-gradient(180deg, #facc15 0%, #eab308 100%);
-            color: #1e1b4b;
-            border: 2px solid #fef08a;
-            border-radius: 8px;
-            padding: 4px 10px;
-            font-size: clamp(0.64rem, 1.5vw, 0.74rem);
-            font-weight: 900;
-            font-family: 'Courier New', Courier, monospace;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: 0 3px 0 #a16207;
-            transition: transform 0.1s;
-        }
-
-        .fg-open-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 #a16207;
-        }
-
-        .fg-open-btn:disabled {
-            background: #475569;
-            border-color: #64748b;
-            color: #cbd5e1;
-            box-shadow: none;
-            cursor: default;
-        }
-
-        #chest-stage {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             text-align: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        #chest-wrapper {
-            cursor: pointer;
-            position: relative;
-            width: clamp(160px, 34vw, 240px);
-            height: clamp(160px, 34vw, 240px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.65));
-            animation: chestFloat 2.4s ease-in-out infinite;
-        }
-
-        @keyframes chestFloat {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-8px) scale(1.02); }
-        }
-
-        @keyframes chestTapShake {
-            0% { transform: scale(1) rotate(0deg); }
-            25% { transform: scale(1.16) rotate(-9deg); }
-            55% { transform: scale(1.12) rotate(9deg); }
-            80% { transform: scale(1.05) rotate(-4deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        @keyframes chestSuperOpen {
-            0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
-            40% { transform: scale(1.28) rotate(-14deg); filter: brightness(1.8); }
-            70% { transform: scale(1.38) rotate(14deg); filter: brightness(2.4) drop-shadow(0 0 40px #facc15); }
-            100% { transform: scale(0.1) rotate(360deg); opacity: 0; }
-        }
-
-        .chest-hit-anim {
-            animation: chestTapShake 0.36s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-        }
-
-        .chest-open-anim {
-            animation: chestSuperOpen 0.65s ease-in forwards !important;
-        }
-
-        #tap-counter-badge {
-            background: linear-gradient(135deg, #1d4ed8, #7c3aed);
-            border: 2px solid #facc15;
-            color: #fff;
-            font-weight: bold;
-            font-size: clamp(0.8rem, 2.2vw, 1rem);
-            padding: 5px 14px;
-            border-radius: 999px;
-            margin-top: 8px;
-            box-shadow: 0 0 14px rgba(250, 204, 21, 0.6);
-            letter-spacing: 0.5px;
-        }
-
-        #birthday-card-stage {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(160deg, rgba(30, 27, 75, 0.96), rgba(46, 16, 101, 0.96));
-            border: 3px solid #facc15;
-            border-radius: 16px;
-            padding: clamp(14px, 3vw, 24px);
-            max-width: 520px;
-            width: 92%;
-            text-align: center;
-            box-shadow: 0 0 35px rgba(250, 204, 21, 0.55), inset 0 0 20px rgba(56, 189, 248, 0.25);
-            animation: cardPopIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-
-        @keyframes cardPopIn {
-            0% { opacity: 0; transform: scale(0.6) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        #birthday-card-stage h2 {
-            font-size: clamp(1.1rem, 3.2vw, 1.65rem);
-            color: #facc15;
-            text-shadow: 0 0 12px rgba(250, 204, 21, 0.8);
-            margin-bottom: 10px;
-        }
-
-        #birthday-card-stage p {
-            font-size: clamp(0.72rem, 1.9vw, 0.88rem);
-            color: #f3e8ff;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-
-        #skip-birthday-btn {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: rgba(30, 27, 75, 0.9);
-            color: #e9d5ff;
-            border: 2px solid #a855f7;
-            padding: 6px 14px;
-            font-size: clamp(0.7rem, 1.8vw, 0.82rem);
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            z-index: 65;
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
-            transition: all 0.2s ease;
-        }
-
-        #skip-birthday-btn:hover, #skip-birthday-btn:active {
-            background: #7c3aed;
-            color: #fff;
-            border-color: #facc15;
-            transform: scale(1.05);
-        }
-
-        .bday-confetti {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-radius: 2px;
-            pointer-events: none;
-            z-index: 62;
         }
     </style>
 </head>
@@ -720,123 +314,762 @@
 
     <div id="game-wrapper">
         <div id="game-container">
-            <!-- Pantalla previa de Regalo Sorpresa de Cumpleaños -->
-            <div id="birthday-overlay">
-                <div id="chest-stage">
-                    <p style="font-size: clamp(0.75rem, 2vw, 0.95rem); color: #38bdf8; font-weight: bold; text-shadow: 0 0 8px #0284c7; margin-bottom: 6px;">
-                        ✨ ¡TIENES UN COFRE ESPECIAL! ✨
-                    </p>
-                    <div id="chest-wrapper" title="¡Toca para abrir el regalo!">
-                        <svg viewBox="0 0 260 250" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="blueWood" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="#38bdf8"/>
-                                    <stop offset="50%" stop-color="#1d4ed8"/>
-                                    <stop offset="100%" stop-color="#1e3a8a"/>
-                                </linearGradient>
-                                <linearGradient id="goldTrim" x1="0" y1="0" x2="1" y2="1">
-                                    <stop offset="0%" stop-color="#fef08a"/>
-                                    <stop offset="45%" stop-color="#facc15"/>
-                                    <stop offset="100%" stop-color="#ca8a04"/>
-                                </linearGradient>
-                                <linearGradient id="ribbonGlow" x1="0" y1="0" x2="1" y2="0">
-                                    <stop offset="0%" stop-color="#0284c7"/>
-                                    <stop offset="50%" stop-color="#7dd3fc"/>
-                                    <stop offset="100%" stop-color="#0284c7"/>
-                                </linearGradient>
-                            </defs>
-
-                            <path d="M130 56 C95 20, 62 38, 86 64 C102 74, 120 64, 130 58 Z" fill="url(#goldTrim)" stroke="#854d0e" stroke-width="3"/>
-                            <path d="M130 56 C165 20, 198 38, 174 64 C158 74, 140 64, 130 58 Z" fill="url(#goldTrim)" stroke="#854d0e" stroke-width="3"/>
-                            <polygon points="130,10 135,26 151,26 138,35 143,50 130,41 117,50 122,35 109,26 125,26" fill="#fef08a" stroke="#eab308" stroke-width="1.5"/>
-
-                            <path d="M44 115 C44 65, 216 65, 216 115 Z" fill="url(#blueWood)" stroke="#1e1b4b" stroke-width="4"/>
-                            <rect x="46" y="115" width="168" height="96" rx="12" fill="url(#blueWood)" stroke="#1e1b4b" stroke-width="4"/>
-
-                            <rect x="44" y="110" width="172" height="14" rx="4" fill="url(#goldTrim)" stroke="#713f12" stroke-width="3"/>
-                            <rect x="44" y="198" width="172" height="14" rx="4" fill="url(#goldTrim)" stroke="#713f12" stroke-width="3"/>
-                            <rect x="44" y="110" width="16" height="102" rx="4" fill="url(#goldTrim)" stroke="#713f12" stroke-width="3"/>
-                            <rect x="200" y="110" width="16" height="102" rx="4" fill="url(#goldTrim)" stroke="#713f12" stroke-width="3"/>
-
-                            <rect x="116" y="64" width="28" height="146" fill="url(#ribbonGlow)" opacity="0.9"/>
-
-                            <polygon points="52,117 58,111 64,117 58,123" fill="#bae6fd" stroke="#0369a1" stroke-width="1.5"/>
-                            <polygon points="202,117 208,111 214,117 208,123" fill="#bae6fd" stroke="#0369a1" stroke-width="1.5"/>
-                            <polygon points="52,205 58,199 64,205 58,211" fill="#bae6fd" stroke="#0369a1" stroke-width="1.5"/>
-                            <polygon points="202,205 208,199 214,205 208,211" fill="#bae6fd" stroke="#0369a1" stroke-width="1.5"/>
-
-                            <path d="M104 95 C85 88, 76 102, 96 112 Z" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
-                            <path d="M156 95 C175 88, 184 102, 164 112 Z" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
-                            <path d="M108 84 L152 84 L152 112 C152 126, 130 135, 130 135 C130 135, 108 126, 108 112 Z" fill="url(#goldTrim)" stroke="#713f12" stroke-width="3"/>
-                            <path d="M113 89 L147 89 L147 110 C147 121, 130 128, 130 128 C130 128, 113 121, 113 110 Z" fill="#1d4ed8"/>
-                            <text x="130" y="118" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="26" fill="#fef08a" stroke="#713f12" stroke-width="1">J</text>
-
-                            <rect x="78" y="143" width="104" height="50" rx="8" fill="#1e3a8a" stroke="url(#goldTrim)" stroke-width="3.5"/>
-                            <text x="130" y="159" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="9.5" fill="#fef08a">FELIZ</text>
-                            <text x="130" y="171" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="9.5" fill="#ffffff">CUMPLEAÑOS</text>
-                            <text x="130" y="185" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="13" fill="#facc15">JUAN</text>
-
-                            <circle cx="34" cy="95" r="3" fill="#fef08a"/>
-                            <circle cx="226" cy="92" r="3.5" fill="#7dd3fc"/>
-                            <circle cx="28" cy="175" r="2.5" fill="#facc15"/>
-                            <circle cx="232" cy="168" r="3" fill="#fef08a"/>
-                        </svg>
-                    </div>
-                    <div id="tap-counter-badge">👆 ¡Toca el regalo! (8 toques restantes)</div>
-                </div>
-
-                <div id="birthday-card-stage">
-                    <div style="font-size: 2.2rem; margin-bottom: 4px;">🎂🎉🥳🎁</div>
-                    <h2>¡FELIZ CUMPLEAÑOS, JUAN!</h2>
-                    <p>
-                        ¡Muchísimas felicidades en tu día! 🎈✨ Espero que te lo pases genial, que disfrutes muchísimo y que sigas sumando momentos épicos y victorias dentro y fuera del juego. 🏆🔥 ¡Este duelo mitológico está hecho especialmente para ti, pásalo en grande! 👻🎃💜
-                    </p>
-                    <div style="background: rgba(250, 204, 21, 0.16); border: 1.5px dashed #facc15; border-radius: 10px; padding: 6px 12px; margin-bottom: 12px; color: #fef08a; font-weight: bold; font-size: clamp(0.75rem, 2vw, 0.9rem);">
-                        🍬 ¡REGALO EXTRA: +50 CARAMELOS DE BONIFICACIÓN! 🍭
-                    </div>
-                    <button class="btn" id="enter-game-from-bday-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); border-color: #fef08a; color: #fff; font-size: 0.92rem; padding: 9px 20px;">
-                        🎮 ¡VOLVER A RECOMPENSAS!
-                    </button>
-                </div>
-
-                <button id="skip-birthday-btn">Saltar ⏭️</button>
+            <div id="hud" style="display:none;">
+                <div>PUNTOS: <span id="score">0</span></div>
+                <div>TIEMPO: <span id="timer">60</span>s</div>
+                <div>MODO: <span id="net-status">SOLO</span></div>
             </div>
 
-            <!-- Sección aparte de Cofres y Recompensas estilo Fall Guys -->
-            <div id="chests-hub-screen" class="ui-screen">
-                <h1 style="color: #facc15; text-shadow: 0 0 12px rgba(250, 204, 21, 0.8);">🎁 COFRES Y RECOMPENSAS 🏆</h1>
-                <p class="instructions" style="margin-bottom: 4px;">¡Abre tus cofres disponibles para ganar caramelos extra antes de entrar a la arena!</p>
+            <div id="leaderboard" style="display:none;">
+                <h3>🏆 RANKING</h3>
+                <div id="rank-list"></div>
+            </div>
 
-                <div class="fg-chests-grid">
-                    <div class="fg-chest-card special-juan" id="card-chest-juan">
-                        <span class="fg-badge-tag">ESPECIAL</span>
-                        <div class="fg-chest-icon">👑🎁</div>
-                        <div class="fg-chest-title">Cofre de Juan</div>
-                        <div class="fg-chest-reward">+50 🍬 + Sorpresa</div>
-                        <button class="fg-open-btn" id="btn-open-juan-chest">¡ABRIR!</button>
-                    </div>
+            <div id="menu-screen" class="ui-screen">
+                <h1>🎃 HALLOWEEN MYTHOLOGICAL DUEL 👻</h1>
+                <p class="instructions">¡Elige tu ser mitológico! Muevete, lanza hechizos con 🪄 y recoge calabazas doradas para invencibilidad, imán de caramelos y explosión de confeti.</p>
+                
+                <div class="char-grid" id="char-selection"></div>
 
-                    <div class="fg-chest-card" id="card-chest-daily">
-                        <span class="fg-badge-tag" style="background:#38bdf8;">500 🍬</span>
-                        <div class="fg-chest-icon">🎃📦</div>
-                        <div class="fg-chest-title">Cofre Calabaza</div>
-                        <div class="fg-chest-reward">+20 🍬 Bonificación</div>
-                        <button class="fg-open-btn" id="btn-open-daily-chest" disabled>🔒 0 / 500 🍬</button>
-                    </div>
-
-                    <div class="fg-chest-card" id="card-chest-mystic">
-                        <span class="fg-badge-tag" style="background:#c084fc; color:#fff;">3 DUELOS</span>
-                        <div class="fg-chest-icon">🔮✨</div>
-                        <div class="fg-chest-title">Cofre Arcano</div>
-                        <div class="fg-chest-reward">+30 🍬 Bonificación</div>
-                        <button class="fg-open-btn" id="btn-open-mystic-chest" disabled>🔒 0 / 3 Partidas</button>
-                    </div>
+                <div style="margin-top: 6px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;">
+                    <button class="btn" id="start-solo-btn">¡JUGAR SOLO!</button>
+                    <button class="btn" id="multi-btn" style="background-color: #581c87;">SALA MULTIJUGADOR</button>
                 </div>
+            </div>
 
-                <div id="chests-bonus-banner" style="font-size: 0.76rem; color: #4ade80; font-weight: bold; min-height: 18px; margin-bottom: 4px;"></div>
-                <button class="btn" id="back-to-menu-from-chests-btn" style="width: 100%; max-width: 220px; margin-top: 6px;">🏠 Volver al Menú</button>
+            <canvas id="gameCanvas" width="800" height="450"></canvas>
+
+            <div id="multi-modal" class="modal">
+                <div class="modal-content">
+                    <h2>MODO MULTIJUGADOR</h2>
+                    <p style="font-size: 0.7rem; margin: 4px 0;">Crea una sala o introduce el código de un amigo en otro dispositivo.</p>
+                    <div style="margin: 6px 0;">
+                        <p style="font-size: 0.65rem;">Tu Código de Sala:</p>
+                        <input type="text" id="room-code-input" readonly value="DUELO-9921" />
+                        <button class="btn" id="copy-code-btn" style="font-size:0.65rem; padding:3px 6px;">Copiar</button>
+                    </div>
+                    <div style="margin: 6px 0; border-top: 1px dashed #7c3aed; padding-top: 6px;">
+                        <p style="font-size: 0.65rem;">¿Unirte a la sala de un amigo?</p>
+                        <input type="text" id="join-code-input" placeholder="Ej: DUELO-1234" />
+                        <button class="btn" id="join-room-btn" style="background-color: #047857; font-size: 0.7rem; padding: 4px 8px;">CONECTAR</button>
+                    </div>
+                    <button class="btn" id="start-multi-match" style="background-color: #b91c1c; width: 100%; margin-top: 4px;">¡EMPEZAR BATALLA ONLINE!</button>
+                    <button class="btn" id="close-modal-btn" style="background-color: #334155; font-size: 0.65rem; width: 100%; margin-top: 4px;">Volver</button>
+                </div>
+            </div>
+
+            <div id="podium-modal" class="modal">
+                <div class="modal-content">
+                    <h2>🎉 ¡FIN DE LA PARTIDA! 🏆</h2>
+                    <p style="font-size: 0.75rem; margin: 4px 0;">Así ha quedado el podio global:</p>
+                    <div id="podium-results" style="margin: 6px 0; font-size: 0.75rem; text-align: left; padding: 0 4px;"></div>
+                    <button class="btn" id="restart-btn" style="background-color: #7c3aed; width: 100%;">JUGAR OTRA VEZ</button>
+                </div>
             </div>
         </div>
+
+        <div id="touch-controls-area">
+            <div id="external-joystick-base">
+                <div id="external-joystick-thumb"></div>
+            </div>
+            <div id="external-shoot-btn" title="Disparar Hechizo">🪄</div>
+        </div>
     </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const characters = [
+            { name: "Zeus", icon: "⚡" }, { name: "Anubis", icon: "🐕" },
+            { name: "Valkyrie", icon: "🛡️" }, { name: "Medusa", icon: "🐍" },
+            { name: "Kitsune", icon: "🦊" }, { name: "Dragon", icon: "🐲" },
+            { name: "Grim", icon: "💀" }, { name: "Witch", icon: "🧙‍♀️" },
+            { name: "Vampire", icon: "🧛‍♂️" }, { name: "Ghost", icon: "👻" },
+            { name: "Zombie", icon: "🧟" }, { name: "Demon", icon: "😈" },
+            { name: "Alien", icon: "👽" }, { name: "Pumpkin", icon: "🎃" },
+            { name: "Phoenix", icon: "🔥" }, { name: "Cerberus", icon: "🐕‍🦺" },
+            { name: "Griffin", icon: "🦅" }, { name: "Pegasus", icon: "🐴" },
+            { name: "Kraken", icon: "🦑" }, { name: "Minotaur", icon: "🐂" },
+            { name: "Chimera", icon: "🦁" }, { name: "Sphinx", icon: "🗿" },
+            { name: "Yeti", icon: "🧌" }, { name: "Gargoyle", icon: "🦇" },
+            { name: "Hydra", icon: "🐉" }, { name: "Cyclops", icon: "👁️" },
+            { name: "Banshee", icon: "🗣️" }, { name: "Goblin", icon: "👺" },
+            { name: "Werewolf", icon: "🐺" }, { name: "Cthulhu", icon: "🐙" }
+        ];
+
+        let selectedCharIndex = 0;
+        let gameStarted = false;
+        let score = 0;
+        let timeLeft = 60;
+        let gameTimerInterval = null;
+        let localHitTimer = 0;
+        let localShieldTimer = 0;
+        let isOnlineMode = false;
+        let currentRoomCode = "DUELO-9921";
+        
+        let db, auth, userId, appId;
+        let remotePlayers = {};
+        let unsubRoom = null;
+
+        try {
+            appId = typeof __app_id !== 'undefined' ? __app_id : 'halloween-myth-duel-v1';
+            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+                apiKey: "AIzaSyDummyKeyForSandbox12345",
+                authDomain: "sandbox-app.firebaseapp.com",
+                projectId: "sandbox-app",
+                storageBucket: "sandbox-app.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456789:web:abcdef"
+            };
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            async function initAuth() {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    userId = auth.currentUser ? auth.currentUser.uid : 'user_' + Math.random().toString(36).substring(2, 9);
+                } catch (e) {
+                    userId = 'user_' + Math.random().toString(36).substring(2, 9);
+                }
+            }
+            initAuth();
+        } catch (err) {
+            userId = 'user_' + Math.random().toString(36).substring(2, 9);
+        }
+
+        let bots = [
+            { x: 300, y: 150, vx: 2.2, vy: 1.4, charIndex: 6, name: "Grim", score: 0, hitTimer: 0 },
+            { x: 550, y: 320, vx: -2.0, vy: 1.6, charIndex: 3, name: "Medusa", score: 0, hitTimer: 0 },
+            { x: 220, y: 280, vx: 2.0, vy: -1.8, charIndex: 0, name: "Zeus", score: 0, hitTimer: 0 }
+        ];
+
+        let candies = [];
+        let projectiles = [];
+        let powerUps = []; 
+        let glitterParticles = [];
+        let backgroundEffects = [];
+        let keys = {};
+
+        let joystickActive = false;
+        let joystickVector = { x: 0, y: 0 };
+        const joystickBase = document.getElementById("external-joystick-base");
+        const joystickThumb = document.getElementById("external-joystick-thumb");
+
+        if (joystickBase) {
+            joystickBase.addEventListener("touchstart", (e) => {
+                joystickActive = true;
+                handleJoystickMove(e.touches[0]);
+                e.preventDefault();
+            }, { passive: false });
+        }
+
+        window.addEventListener("touchmove", (e) => {
+            if (!joystickActive) return;
+            for (let i = 0; i < e.touches.length; i++) {
+                let touch = e.touches[i];
+                let rect = joystickBase.getBoundingClientRect();
+                if (touch.clientX >= rect.left - 50 && touch.clientX <= rect.right + 50 &&
+                    touch.clientY >= rect.top - 50 && touch.clientY <= rect.bottom + 50) {
+                    handleJoystickMove(touch);
+                    break;
+                }
+            }
+            e.preventDefault();
+        }, { passive: false });
+
+        window.addEventListener("touchend", () => {
+            joystickActive = false;
+            joystickVector = { x: 0, y: 0 };
+            if (joystickThumb) joystickThumb.style.transform = `translate(0px, 0px)`;
+        });
+
+        function handleJoystickMove(touch) {
+            let rect = joystickBase.getBoundingClientRect();
+            let centerX = rect.left + rect.width / 2;
+            let centerY = rect.top + rect.height / 2;
+            let dx = touch.clientX - centerX;
+            let dy = touch.clientY - centerY;
+            let dist = Math.hypot(dx, dy);
+            let maxRadius = 28;
+
+            if (dist > maxRadius) {
+                dx = (dx / dist) * maxRadius;
+                dy = (dy / dist) * maxRadius;
+            }
+
+            if (joystickThumb) joystickThumb.style.transform = `translate(${dx}px, ${dy}px)`;
+            joystickVector = { x: dx / maxRadius, y: dy / maxRadius };
+        }
+
+        const shootBtn = document.getElementById("external-shoot-btn");
+        if (shootBtn) {
+            shootBtn.ontouchstart = (e) => {
+                if (gameStarted) shootProjectile();
+                e.preventDefault();
+            };
+            shootBtn.onclick = () => {
+                if (gameStarted) shootProjectile();
+            };
+        }
+
+        const grid = document.getElementById("char-selection");
+        if (grid) {
+            characters.forEach((char, idx) => {
+                const card = document.createElement("div");
+                card.className = `char-card ${idx === 0 ? 'selected' : ''}`;
+                card.innerHTML = `<span>${char.icon}</span>${char.name}`;
+                card.onclick = () => {
+                    document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedCharIndex = idx;
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        let player = { x: 100, y: 225, speed: 5.5 };
+
+        window.addEventListener('keydown', e => {
+            keys[e.key.toLowerCase()] = true;
+            keys[e.code] = true;
+            if ((e.code === 'Space' || e.key === 'Enter') && gameStarted) {
+                shootProjectile();
+            }
+        });
+        window.addEventListener('keyup', e => {
+            keys[e.key.toLowerCase()] = false;
+            keys[e.code] = false;
+        });
+
+        function shootProjectile() {
+            projectiles.push({ x: player.x + 15, y: player.y + 15, vx: 9, vy: 0, owner: 'local' });
+        }
+
+        function spawnCandy() {
+            let maxCandies = 9;
+            if (candies.length < maxCandies) {
+                candies.push({
+                    id: Math.random().toString(36).substring(2, 9),
+                    x: Math.random() * 720 + 40,
+                    y: Math.random() * 300 + 60,
+                    icon: ["🍬", "🍫", "🍭", "🧁", "🍩"][Math.floor(Math.random() * 5)]
+                });
+            }
+        }
+        setInterval(spawnCandy, 1200);
+        for (let i = 0; i < 8; i++) spawnCandy();
+
+        for (let i = 0; i < 14; i++) {
+            backgroundEffects.push({
+                x: Math.random() * 800,
+                y: Math.random() * 280,
+                vx: (Math.random() * 1.5 + 0.5) * (Math.random() < 0.5 ? 1 : -1),
+                vy: (Math.random() * 0.4 - 0.2),
+                type: Math.random() < 0.4 ? 'bat' : 'leaf',
+                size: Math.random() * 6 + 8,
+                color: ["#c084fc", "#facc15", "#fb923c", "#4ade80", "#38bdf8"][Math.floor(Math.random() * 5)]
+            });
+        }
+
+        setInterval(() => {
+            if (gameStarted && powerUps.length === 0) {
+                powerUps.push({
+                    x: Math.random() * 680 + 60,
+                    y: Math.random() * 260 + 80,
+                    duration: 400
+                });
+            }
+        }, 13000);
+
+        function spawnMiniExplosion(x, y) {
+            for (let i = 0; i < 28; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 4.5 + 1.2;
+                glitterParticles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    life: 45,
+                    color: ["#facc15", "#c084fc", "#38bdf8", "#f472b6", "#4ade80", "#fb923c", "#e879f9"][Math.floor(Math.random() * 7)]
+                });
+            }
+        }
+
+        document.getElementById("start-solo-btn").onclick = () => {
+            isOnlineMode = false;
+            document.getElementById("net-status").innerText = "SOLO";
+            startGame();
+        };
+
+        document.getElementById("multi-btn").onclick = () => {
+            document.getElementById("multi-modal").style.display = "flex";
+            currentRoomCode = "DUELO-" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('room-code-input').value = currentRoomCode;
+        };
+
+        document.getElementById("close-modal-btn").onclick = () => {
+            document.getElementById("multi-modal").style.display = "none";
+        };
+
+        document.getElementById("copy-code-btn").onclick = () => {
+            const input = document.getElementById('room-code-input');
+            input.select();
+            document.execCommand('copy');
+        };
+
+        document.getElementById("join-room-btn").onclick = () => {
+            const codeToJoin = document.getElementById("join-code-input").value.trim();
+            if (codeToJoin) {
+                currentRoomCode = codeToJoin.toUpperCase();
+                document.getElementById('room-code-input').value = currentRoomCode;
+                alert("¡Código de sala actualizado a " + currentRoomCode + "!");
+            }
+        };
+
+        document.getElementById("start-multi-match").onclick = () => {
+            isOnlineMode = true;
+            document.getElementById("net-status").innerText = "ONLINE (" + currentRoomCode + ")";
+            document.getElementById("multi-modal").style.display = "none";
+            startGame();
+            setupFirestoreMultiplayer();
+        };
+
+        document.getElementById("restart-btn").onclick = () => {
+            document.getElementById("podium-modal").style.display = "none";
+            score = 0;
+            timeLeft = 60;
+            localShieldTimer = 0;
+            document.getElementById("score").innerText = score;
+            bots.forEach(b => { b.score = 0; b.hitTimer = 0; });
+            player.x = 100; player.y = 225;
+            startGame();
+        };
+
+        function startGame() {
+            document.getElementById("menu-screen").style.display = "none";
+            document.getElementById("hud").style.display = "flex";
+            document.getElementById("leaderboard").style.display = "block";
+            gameStarted = true;
+
+            if (gameTimerInterval) clearInterval(gameTimerInterval);
+            gameTimerInterval = setInterval(() => {
+                if (!gameStarted) return;
+                timeLeft--;
+                const timerEl = document.getElementById("timer");
+                if (timerEl) timerEl.innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(gameTimerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function setupFirestoreMultiplayer() {
+            if (!db) return;
+            const roomDocRef = doc(db, 'artifacts_data', appId + '_rooms_' + currentRoomCode);
+
+            setInterval(async () => {
+                if (!gameStarted || !isOnlineMode) return;
+                try {
+                    const uId = userId || 'player_' + Math.floor(Math.random()*1000);
+                    await setDoc(roomDocRef, {
+                        lastUpdated: Date.now(),
+                        [uId]: {
+                            name: "Jugador (" + characters[selectedCharIndex].name + ")",
+                            charIndex: selectedCharIndex,
+                            x: Math.round(player.x),
+                            y: Math.round(player.y),
+                            score: score
+                        }
+                    }, { merge: true });
+                } catch (e) {}
+            }, 120);
+
+            unsubRoom = onSnapshot(roomDocRef, (snap) => {
+                if (!snap.exists()) return;
+                const data = snap.data();
+                remotePlayers = {};
+                const currentUserId = userId;
+                for (let key in data) {
+                    if (key !== 'lastUpdated' && key !== currentUserId) {
+                        remotePlayers[key] = data[key];
+                    }
+                }
+            }, (err) => {});
+        }
+
+        function endGame() {
+            gameStarted = false;
+            document.getElementById("hud").style.display = "none";
+            document.getElementById("leaderboard").style.display = "none";
+            if (unsubRoom) { unsubRoom(); unsubRoom = null; }
+
+            let participants = [
+                { name: "Tú (" + characters[selectedCharIndex].name + ")", score: score, icon: characters[selectedCharIndex].icon }
+            ];
+
+            if (isOnlineMode) {
+                for (let rId in remotePlayers) {
+                    let rp = remotePlayers[rId];
+                    participants.push({
+                        name: rp.name || "Jugador Online",
+                        score: rp.score || 0,
+                        icon: characters[rp.charIndex || 0].icon
+                    });
+                }
+            } else {
+                bots.forEach(b => {
+                    participants.push({ name: b.name + " (" + characters[b.charIndex].name + ")", score: b.score, icon: characters[b.charIndex].icon });
+                });
+            }
+
+            participants.sort((a, b) => b.score - a.score);
+
+            let podiumHtml = "";
+            let medals = ["🥇 1.er: ", "🥈 2.do: ", "🥉 3.er: "];
+            
+            for (let i = 0; i < Math.min(3, participants.length); i++) {
+                podiumHtml += `<div style="margin: 4px 0;"><b>${medals[i]}</b> ${participants[i].icon} ${participants[i].name} — <b>${participants[i].score} pts</b></div>`;
+            }
+
+            document.getElementById("podium-results").innerHTML = podiumHtml;
+            document.getElementById("podium-modal").style.display = "flex";
+        }
+
+        function update() {
+            if (!gameStarted) return;
+
+            backgroundEffects.forEach(eff => {
+                eff.x += eff.vx;
+                eff.y += eff.vy + Math.sin(Date.now() * 0.003) * 0.3;
+                if (eff.x > 820) eff.x = -20;
+                if (eff.x < -20) eff.x = 820;
+                if (eff.y > 320) eff.y = 50;
+                if (eff.y < 20) eff.y = 320;
+            });
+
+            if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
+            if (keys['arrowright'] || keys['d']) player.x += player.speed;
+            if (keys['arrowup'] || keys['w']) player.y -= player.speed;
+            if (keys['arrowdown'] || keys['s']) player.y += player.speed;
+
+            if (joystickActive && (joystickVector.x !== 0 || joystickVector.y !== 0)) {
+                player.x += joystickVector.x * player.speed;
+                player.y += joystickVector.y * player.speed;
+            }
+
+            player.x = Math.max(20, Math.min(canvas.width - 50, player.x));
+            player.y = Math.max(40, Math.min(canvas.height - 50, player.y));
+
+            if (localHitTimer > 0) localHitTimer--;
+            
+            let previousShieldState = localShieldTimer > 0;
+            if (localShieldTimer > 0) localShieldTimer--;
+
+            if (previousShieldState && localShieldTimer === 0) {
+                spawnMiniExplosion(player.x + 15, player.y + 15);
+            }
+
+            candies.forEach((candy, index) => {
+                if (Math.hypot(player.x - candy.x, player.y - candy.y) < 32) {
+                    score += 10;
+                    const scoreEl = document.getElementById("score");
+                    if (scoreEl) scoreEl.innerText = score;
+                    candies.splice(index, 1);
+                }
+            });
+
+            powerUps.forEach((pu, index) => {
+                pu.duration--;
+                if (Math.hypot(player.x - pu.x, player.y - pu.y) < 35) {
+                    localShieldTimer = 400;
+                    spawnMiniExplosion(pu.x + 15, pu.y + 15);
+                    powerUps.splice(index, 1);
+                } else if (pu.duration <= 0) {
+                    powerUps.splice(index, 1);
+                }
+            });
+
+            glitterParticles.forEach((gp, index) => {
+                gp.x += gp.vx;
+                gp.y += gp.vy;
+                gp.life--;
+
+                if (!isOnlineMode) {
+                    bots.forEach(bot => {
+                        if (bot && Math.hypot(gp.x - bot.x, gp.y - bot.y) < 22) {
+                            if (bot.score >= 10 && Math.random() < 0.25) {
+                                bot.score -= 10;
+                                bot.hitTimer = 30;
+                                candies.push({
+                                    id: Math.random().toString(36).substring(2, 9),
+                                    x: bot.x + (Math.random() * 30 - 15),
+                                    y: bot.y + (Math.random() * 30 - 15),
+                                    icon: "🍬"
+                                });
+                            }
+                        }
+                    });
+                }
+
+                if (gp.life <= 0) {
+                    glitterParticles.splice(index, 1);
+                }
+            });
+
+            if (localShieldTimer > 0) {
+                candies.forEach((candy, index) => {
+                    let dist = Math.hypot(player.x - candy.x, player.y - candy.y);
+                    if (dist < 120) {
+                        candy.x += (player.x - candy.x) * 0.15;
+                        candy.y += (player.y - candy.y) * 0.15;
+                        if (dist < 32) {
+                            score += 15;
+                            document.getElementById("score").innerText = score;
+                            candies.splice(index, 1);
+                        }
+                    }
+                });
+
+                if (!isOnlineMode) {
+                    bots.forEach(bot => {
+                        if (bot && Math.hypot(player.x - bot.x, player.y - bot.y) < 45) {
+                            if (bot.score >= 10 && Math.random() < 0.15) {
+                                bot.score -= 10;
+                                score += 10;
+                                document.getElementById("score").innerText = score;
+                                bot.hitTimer = 35;
+                                spawnMiniExplosion(bot.x + 15, bot.y + 15);
+                                candies.push({
+                                    id: Math.random().toString(36).substring(2, 9),
+                                    x: bot.x,
+                                    y: bot.y,
+                                    icon: "🍬"
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+
+            projectiles.forEach((p, index) => {
+                p.x += p.vx;
+                if (p.x > canvas.width) {
+                    projectiles.splice(index, 1);
+                    return;
+                }
+
+                if (!isOnlineMode) {
+                    bots.forEach(bot => {
+                        if (bot && Math.hypot(p.x - bot.x, p.y - bot.y) < 28) {
+                            if (bot.score >= 10) {
+                                bot.score -= 10;
+                                if (p.owner === 'local') {
+                                    score += 10;
+                                    document.getElementById("score").innerText = score;
+                                }
+                            }
+                            bot.hitTimer = 35;
+                            spawnMiniExplosion(bot.x + 15, bot.y + 15);
+                            candies.push({
+                                id: Math.random().toString(36).substring(2, 9),
+                                x: bot.x,
+                                y: bot.y,
+                                icon: "🍫"
+                            });
+                            projectiles.splice(index, 1);
+                        }
+                    });
+                }
+            });
+
+            if (!isOnlineMode) {
+                bots.forEach(bot => {
+                    if (!bot) return;
+                    if (bot.hitTimer > 0) bot.hitTimer--;
+                    bot.x += bot.vx;
+                    bot.y += bot.vy;
+
+                    if (bot.x < 30 || bot.x > canvas.width - 50) bot.vx *= -1;
+                    if (bot.y < 40 || bot.y > canvas.height - 50) bot.vy *= -1;
+
+                    candies.forEach((candy, cIndex) => {
+                        if (Math.hypot(bot.x - candy.x, bot.y - candy.y) < 28) {
+                            bot.score += 10;
+                            candies.splice(cIndex, 1);
+                        }
+                    });
+                });
+            }
+
+            updateLeaderboard();
+        }
+
+        function updateLeaderboard() {
+            let participants = [
+                { name: "Tú", score: score }
+            ];
+
+            if (isOnlineMode) {
+                for (let rId in remotePlayers) {
+                    let rp = remotePlayers[rId];
+                    participants.push({ name: rp.name ? rp.name.split(" ")[0] : "Jugador", score: rp.score || 0 });
+                }
+            } else {
+                bots.forEach(b => {
+                    participants.push({ name: b.name, score: b.score });
+                });
+            }
+
+            participants.sort((a, b) => b.score - a.score);
+
+            let rankHtml = "";
+            participants.forEach((p, idx) => {
+                let isMe = p.name === "Tú" ? "color: #facc15; font-weight: bold;" : "";
+                rankHtml += `<div class="rank-row" style="${isMe}"><span>${idx + 1}. ${p.name}</span><span>${p.score}</span></div>`;
+            });
+            const rankListEl = document.getElementById("rank-list");
+            if (rankListEl) rankListEl.innerHTML = rankHtml;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#1e1b4b";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "rgba(250, 204, 21, 0.15)";
+            ctx.beginPath();
+            ctx.arc(680, 90, 65, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#facc15";
+            ctx.beginPath();
+            ctx.arc(680, 90, 40, 0, Math.PI * 2);
+            ctx.fill();
+
+            backgroundEffects.forEach(eff => {
+                if (eff.type === 'bat') {
+                    ctx.font = "14px monospace";
+                    ctx.fillText("🦇", eff.x, eff.y);
+                } else {
+                    ctx.fillStyle = eff.color;
+                    ctx.beginPath();
+                    ctx.ellipse(eff.x, eff.y, eff.size, eff.size * 0.5, Math.sin(Date.now() * 0.005), 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            ctx.fillStyle = "#2e1065";
+            ctx.beginPath();
+            ctx.moveTo(0, 270);
+            ctx.quadraticCurveTo(200, 200, 400, 250);
+            ctx.quadraticCurveTo(650, 310, 800, 240);
+            ctx.lineTo(800, 450);
+            ctx.lineTo(0, 450);
+            ctx.fill();
+
+            candies.forEach(candy => {
+                ctx.font = "22px monospace";
+                ctx.fillText(candy.icon, candy.x, candy.y);
+            });
+
+            powerUps.forEach(pu => {
+                ctx.font = "26px monospace";
+                ctx.fillText("🎃", pu.x, pu.y + 18);
+                ctx.fillStyle = "rgba(250, 204, 21, 0.5)";
+                ctx.beginPath();
+                ctx.arc(pu.x + 12, pu.y + 10, 22 + Math.sin(Date.now() * 0.01) * 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            ctx.fillStyle = "#facc15";
+            projectiles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            glitterParticles.forEach(gp => {
+                ctx.fillStyle = gp.color;
+                ctx.fillRect(gp.x, gp.y, 5, 5);
+            });
+
+            if (!isOnlineMode) {
+                bots.forEach(bot => {
+                    if (!bot) return;
+                    let bChar = characters[bot.charIndex];
+                    ctx.font = "30px monospace";
+                    if (bot.hitTimer > 0 && Math.floor(Date.now() / 80) % 2 === 0) {
+                        ctx.globalAlpha = 0.3;
+                    }
+                    ctx.fillText(bChar.icon, bot.x, bot.y + 22);
+                    ctx.globalAlpha = 1.0;
+
+                    ctx.fillStyle = "#f3e8ff";
+                    ctx.font = "10px monospace";
+                    ctx.fillText(bot.name, bot.x - 2, bot.y - 4);
+                });
+            } else {
+                for (let rId in remotePlayers) {
+                    let rp = remotePlayers[rId];
+                    let rChar = characters[rp.charIndex || 0];
+                    ctx.font = "30px monospace";
+                    ctx.fillText(rChar.icon, rp.x || 100, (rp.y || 200) + 22);
+                    ctx.fillStyle = "#38bdf8";
+                    ctx.font = "10px monospace";
+                    ctx.fillText(rp.name || "Jugador", (rp.x || 100) - 5, (rp.y || 200) - 4);
+                }
+            }
+
+            const char = characters[selectedCharIndex];
+            ctx.font = "30px monospace";
+            if (localHitTimer > 0 && Math.floor(Date.now() / 80) % 2 === 0) {
+                ctx.globalAlpha = 0.3;
+            }
+            ctx.fillText(char.icon, player.x, player.y + 22);
+            ctx.globalAlpha = 1.0;
+
+            if (localShieldTimer > 0) {
+                ctx.strokeStyle = "rgba(250, 204, 21, 0.85)";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(player.x + 14, player.y + 10, 32, 0, Math.PI * 2);
+                ctx.stroke();
+
+                let glitterColors = ["#facc15", "#c084fc", "#38bdf8", "#f472b6", "#4ade80", "#fb923c"];
+                let time = Date.now() * 0.009;
+                for (let g = 0; g < 6; g++) {
+                    let angle = time + (g * ((Math.PI * 2) / 6));
+                    let gx = (player.x + 14) + Math.cos(angle) * 32;
+                    let gy = (player.y + 10) + Math.sin(angle) * 32;
+                    ctx.fillStyle = glitterColors[g];
+                    ctx.fillRect(gx - 2, gy - 2, 5, 5);
+                }
+            }
+
+            ctx.fillStyle = "#facc15";
+            ctx.font = "10px monospace";
+            ctx.fillText("TÚ", player.x + 4, player.y - 4);
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    </script>
 </body>
 </html>
